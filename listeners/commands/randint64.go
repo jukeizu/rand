@@ -1,7 +1,10 @@
 package commands
 
 import (
+	"fmt"
+	"math/rand"
 	"regexp"
+	"time"
 
 	"github.com/go-kit/kit/log"
 
@@ -28,9 +31,19 @@ func (r *randInt64) IsCommand(request handler.Request) (bool, error) {
 }
 
 func (r *randInt64) Handle(request handler.Request) (handler.Results, error) {
+	randInt64 := getRandInt64(1000)
+
 	result := handler.Result{
-		Content: "test",
+		Content: fmt.Sprintf("%d", randInt64),
 	}
 
 	return handler.Results{result}, nil
+}
+
+func getRandInt64(maxValue int64) int64 {
+	seed := rand.NewSource(time.Now().UnixNano())
+
+	r := rand.New(seed)
+
+	return r.Int63n(maxValue)
 }
