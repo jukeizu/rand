@@ -23,7 +23,6 @@ func init() {
 }
 
 func main() {
-
 	logger := logging.GetLogger("command.rand.int64", os.Stdout)
 
 	handlerConfig := RandHandlerConfig{}
