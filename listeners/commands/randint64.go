@@ -27,7 +27,7 @@ func (c *command) RandInt64() RandInt64 {
 }
 
 func (r *randInt64) IsCommand(request handler.Request) (bool, error) {
-	return regexp.MatchString(`!rand (.*?)`, request.Content)
+	return regexp.MatchString(`!rand(.*?)`, request.Content)
 }
 
 func (r *randInt64) Handle(request handler.Request) (handler.Results, error) {
