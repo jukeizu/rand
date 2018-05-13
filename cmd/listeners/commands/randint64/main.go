@@ -3,19 +3,17 @@ package main
 import (
 	"os"
 
-	base "github.com/jukeizu/client-base"
 	"github.com/jukeizu/handler"
 	"github.com/jukeizu/rand/listeners/commands"
 	"github.com/shawntoffel/services-core/command"
-	"github.com/shawntoffel/services-core/config"
+	configreader "github.com/shawntoffel/services-core/config"
 	"github.com/shawntoffel/services-core/logging"
 )
 
 var commandArgs command.CommandArgs
 
-type RandHandlerConfig struct {
-	HandlerConfig    handler.HandlerConfig
-	RandClientConfig base.ClientConfig
+type Config struct {
+	HandlerConfig handler.HandlerConfig
 }
 
 func init() {
@@ -25,15 +23,15 @@ func init() {
 func main() {
 	logger := logging.GetLogger("command.rand.int64", os.Stdout)
 
-	handlerConfig := RandHandlerConfig{}
+	config := Config{}
 
-	err := config.ReadConfig(commandArgs.ConfigFile, &handlerConfig)
+	err := configreader.ReadConfig(commandArgs.ConfigFile, &config)
 
 	if err != nil {
 		panic(err)
 	}
 
-	handler, err := handler.NewCommandHandler(logger, handlerConfig.HandlerConfig)
+	handler, err := handler.NewCommandHandler(logger, config.HandlerConfig)
 
 	if err != nil {
 		panic(err)
