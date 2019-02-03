@@ -1,0 +1,17 @@
+services:
+  - docker
+
+script:
+  - make docker-build
+
+before_deploy:
+  - echo "$DOCKER_PASS" | docker login -u="$DOCKER_USER" --password-stdin
+
+deploy:
+  - provider: script
+    script:
+        - make docker-deploy
+    skip_cleanup: true
+    on:
+      tags: true
+      branch: dev
