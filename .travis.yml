@@ -1,7 +1,7 @@
-services:
-  - docker
+language: go
 
 script:
+  - make deps test
   - make docker-build
 
 before_deploy:
