@@ -1,16 +1,30 @@
-VERSION=$(shell git describe --tags)
-BUILD=GOARCH=amd64 go build -v
+TAG=$(shell git describe --tags)
+VERSION=$(TAG:v%=%)
+REPO=jukeizu/rand
+GO=GO111MODULE=on go
+BUILD=GOARCH=amd64 $(GO) build -ldflags="-s -w -X main.Version=$(VERSION)" 
 
-.PHONY: all deps test build
+.PHONY: all deps test build build-linux docker-build docker-deploy clean
 
-all: deps test build
-
+all: deps test build 
 deps:
-	go get -t -v ./...
+	$(GO) mod download
 
 test:
-	go vet ./...
-	go test -v -race ./...
+	$(GO) vet
+	$(GO) test -v -race
 
 build:
-	for CMD in `ls cmd/listeners/commands`; do $(BUILD) -o bin/$$CMD-command-$(VERSION) ./cmd/listeners/commands/$$CMD; done
+	$(BUILD) -o bin/rand-$(VERSION)
+
+build-linux:
+	CGO_ENABLED=0 GOOS=linux $(BUILD) -a -installsuffix cgo -o bin/rand
+
+docker-build:
+	docker build -t $(REPO):$(VERSION) .
+
+docker-deploy:
+	docker push $(REPO):$(VERSION)
+
+clean:
+	@find bin -type f -delete -print
