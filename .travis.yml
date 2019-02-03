@@ -15,5 +15,11 @@ deploy:
         - make docker-deploy
     skip_cleanup: true
     on:
-      tags: true
       branch: dev
+
+  - provider: script
+    script:
+        - make docker-deploy
+    skip_cleanup: true
+    on:
+      tags: true
