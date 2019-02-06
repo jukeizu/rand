@@ -32,7 +32,7 @@ func main() {
 		Logger()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/rand", contract.NewHttpHandler(Rand))
+	mux.HandleFunc("/rand", contract.MakeHttpHandlerFunc(Rand))
 
 	logger.Info().Str("address", port).Msg("listening")
 	http.ListenAndServe(port, mux)
